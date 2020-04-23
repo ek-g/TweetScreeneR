@@ -1,12 +1,3 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
 library(tidyverse)
 library(lubridate)
@@ -21,13 +12,10 @@ get_tweets <- function(path) {
       dplyr::bind_rows()
 }
 
-# Define UI for application that draws a histogram
 ui <- fluidPage(
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
+    titlePanel("TweetScreeneR"),
+    
     sidebarLayout(
         sidebarPanel(
             textInput("data", h3("Data folder"), "~/GitHub/tweetminer/data/"),
@@ -43,7 +31,6 @@ ui <- fluidPage(
                                 ),
         ),
 
-        # Show a plot of the generated distribution
         mainPanel(
             fluidRow(
                 column(4,
@@ -57,7 +44,6 @@ ui <- fluidPage(
     )
 )
 
-# Define server logic required to draw a histogram
 server <- function(input, output, session) {
     
     tweets <- eventReactive(input$submit, {
@@ -100,5 +86,4 @@ server <- function(input, output, session) {
     })
 }
 
-# Run the application 
 shinyApp(ui = ui, server = server)
