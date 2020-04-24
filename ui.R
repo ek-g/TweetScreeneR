@@ -19,11 +19,13 @@ ui <- fluidPage(
                                 splitLayout(
                                 actionButton("update", "Filter"),
                                 disabled(actionButton("start", "Start", class = "btn-primary")),
-                                cellWidths = c("50%", "50%")),
+                                cellWidths = c("50%", "50%")
+                                            ), # END splitLayout
                                 
                                 p(textOutput("summary"))
-                                ),
-        width = 2),
+                                ), # END conditionalPanel
+                      width = 2
+                      ), # END sidebarPanel
 
         mainPanel(
             fluidRow(
@@ -38,8 +40,9 @@ ui <- fluidPage(
                 actionButton("include_tweet", "Include", class = "btn-success"),
                 actionButton("exclude_tweet", "Exclude", class = "btn-danger"))
                 )
-                )
-            )
-        )
-    )
+                
+                ) # END column
+            ) # End fluidRow
+        ) # END mainPanel
+    ) # END sidebarLayout
 )
