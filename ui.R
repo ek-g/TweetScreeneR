@@ -1,7 +1,7 @@
 
-ui <- fluidPage(
+ui <- fixedPage(
     
-    useShinyjs(),  
+    useShinyjs(),
   
     titlePanel("TweetScreeneR"),
     
@@ -33,30 +33,32 @@ ui <- fluidPage(
                    # actionButton("add_buttons", "Add")
                    )
                       ),
-          width = 3), # END sidebarPanel
+          width = 4,
+          style = "min-height:240px;min-width:300px"), # END sidebarPanel
 
         mainPanel(
-            fluidRow(
+            fixedRow(
                 column(4,
                 wellPanel(
                 htmlOutput("show_tweet"),
-                            style = "min-height:240px"),
+                            style = "min-height:300px;min-width:300px"),
+                splitLayout(
                 disabled(
                 actionButton("prev_tweet", "Previous"),
-                actionButton("next_tweet", "Next")),
-                uiOutput("buttons"),
+                actionButton("next_tweet", "Next"))),
+                #uiOutput("buttons"),
                 br(),br()
                 )
-                ), # End fluidRow
-                fluidRow(
-                  column(2,
-                         disabled(
-                  actionButton("include_tweet", "Include", class = "btn-success btn-block"))
-                  ),
-                  column(2,
-                         disabled(
-                  actionButton("exclude_tweet", "Exclude", class = "btn-danger btn-block"))
+                ), # END fixedRow
+                fixedRow(
+                  column(4,
+                  splitLayout(
+                    disabled(
+                      actionButton("include_tweet", "Include", class = "btn-success btn-block")),
+                    disabled(
+                      actionButton("exclude_tweet", "Exclude", class = "btn-danger btn-block"))
                   )
+                  ) # END fixedRow
                 )
         ) # END mainPanel
     ) # END sidebarLayout
