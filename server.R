@@ -42,6 +42,16 @@ server <- function(input, output, session) {
         mutate(text = str_replace_all(text, "@[A-Za-z0-9_\\-]+", "@mention"))
     }
     
+    # remove already screened
+    
+    if(input$remove_screened == TRUE) {
+      already_screened <- list.files(input$output_folder, full.names = TRUE)
+      already_screened <- already_screened %>% 
+        map(read_csv, col_types = "ccc") %>% 
+        bind_rows()
+      final_filter <- final_filter[!final_filter$status_id %in% already_screened$status_id,]
+    }
+    
     return(final_filter)
   })
   

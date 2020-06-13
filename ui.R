@@ -17,6 +17,7 @@ ui <- fluidPage(
                                 textInput("filter", h4("Search string"), ""),
                                 checkboxInput("ignore_case", "Ignore case"),
                                 checkboxInput("replace_mentions", "Anonymize @mentions", TRUE),
+                                checkboxInput("remove_screened", "Remove already screened tweets", TRUE),
                                 
                                 actionButton("update", "Filter", icon("filter"), class = "btn-block"),
                                 br(),
