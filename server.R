@@ -12,12 +12,18 @@ server <- function(input, output, session) {
     return(tweets)
   })
   
+  output$tweet_count <- renderPrint({
+    cat(nrow(tweets()), "tweets imported")
+    })
+  
   
 # Filter data
   
   tweets_filtered <- eventReactive(input$update, {
     
-    enable("start")
+    c("start", "prev_tweet", "next_tweet") %>% 
+    map(enable)
+    
     index <<- 1
     date_filter <- tweets() %>%
       filter(between(as.Date(created_at), as.Date(input$date[1]), as.Date(input$date[2])))
@@ -60,11 +66,13 @@ server <- function(input, output, session) {
     
     # Make the button label and update it
     toggle_label <- if_else(input$start %% 2 == 0, "Start", "Stop")
-    updateActionButton(session, "start", label = toggle_label)
+    toggle_icon <- icon(if_else(input$start %% 2 == 0, "play", "stop"))
+    updateActionButton(session, "start", label = toggle_label, icon = toggle_icon)
     
     # When started, create the session file by resetting the output
     if(toggle_label == "Stop") {
-      output_file <<- reset_output(input$filter)
+      if(!dir.exists(input$output_folder)) dir.create(input$output_folder)
+      output_file <<- reset_output(input$output_folder, input$filter)
       write_csv(screened_tweets, output_file, col_names = TRUE)
     }
     # Disable start if filter not applied a second time
@@ -72,25 +80,20 @@ server <- function(input, output, session) {
   })
   
   # Save decisions to a file
-  # TODO: recreate as a function!
   
   observeEvent(input$include_tweet, {
-    if(index != nrow(tweets_filtered()) + 1){ 
-      screened_tweets <<- bind_rows(screened_tweets, tweet_decision(tweets_filtered(), "Include"))
-      write_csv(screened_tweets, output_file, append = TRUE)
-      index <<- index + 1}
+    decision_action(tweets_filtered(), "Include")
   })
   
   observeEvent(input$exclude_tweet, {
-    if(index != nrow(tweets_filtered()) + 1){ 
-      screened_tweets <<- bind_rows(screened_tweets, tweet_decision(tweets_filtered(), "Exclude"))
-      write_csv(screened_tweets, output_file, append = TRUE)
-      index <<- index + 1}
+    decision_action(tweets_filtered(), "Exclude")
   })
+
   
-  # Backbutton
+  # Basic navigation:
   
   observeEvent(input$prev_tweet, if(index != 1){ index <<- index - 1 })
+  observeEvent(input$next_tweet, if(index < nrow(tweets_filtered())){ index <<- index + 1 })
   
   # Number of found tweets
   
@@ -98,18 +101,44 @@ server <- function(input, output, session) {
     cat("Tweets found:", nrow(tweets_filtered()))
   })
   
+  # observeEvent(input$custom_buttons, map(c("buttons", "add_buttons"), toggleState))
+  # 
+  # observeEvent(input$add_buttons, {
+  #   
+  #   buttons <- str_squish(str_split(input$buttons, ",")[[1]])
+  #   
+  #   isolate({output$buttons <- renderUI({
+  #     btn_ids <<- paste0("btn_", buttons)
+  #     btn_labels <<- buttons
+  #     map2(btn_ids, btn_labels, actionButton)})
+  #   
+  #   for(ii in 1:length(labels)){
+  #     local({
+  #       i <- ii
+  #       observeEvent(eventExpr = input[[paste0(btn_ids[i])]],
+  #                    handlerExpr = {alert(sprintf("You clicked btn named %s",btn_labels[i]))})
+  #     })
+  #   }
+  #   })
+  # })
+  
   # Render the filtered tweets
   
   output$show_tweet <- renderPrint({
     input$include_tweet
     input$exclude_tweet
     input$prev_tweet
+    input$next_tweet
     input$start
     input$update
     HTML(
+      if(nrow(tweets_filtered()) == 0) {
+           paste0("No tweets found!")
+      } else {
       paste0("Tweet ", index, "/", nrow(tweets_filtered()),
              "<br/><br/>",
-             tweets_filtered()$text[index])
-    )
+              tweets_filtered()$text[index])
+        }
+      )
   })
 }

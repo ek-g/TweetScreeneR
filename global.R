@@ -4,6 +4,15 @@ library(tidyverse)
 library(lubridate)
 library(digest)
 
+# labels <- c("test1", "test2", "test3")
+# 
+# generate_buttons <- function(labels) {
+#   buttons <- labels %>% 
+#     map(actionButton, label = labels)
+#   
+#   return(unlist(buttons))
+# }
+
 # FUN: Get all tweets from .RDS files
 
 get_tweets <- function(path) {
@@ -14,6 +23,21 @@ get_tweets <- function(path) {
   tweet_files %>% 
     purrr::map(readRDS) %>% 
     dplyr::bind_rows()
+}
+
+# FUN: Save the decision data
+
+decision_action <- function(data, decision) {
+  if(index != nrow(data) + 1){ 
+    cur_decision <- tweet_decision(data, decision)
+    if(cur_decision$status_id %in% screened_tweets$status_id) {
+      screened_tweets[screened_tweets$status_id == cur_decision$status_id,] <<- cur_decision
+      write_csv(screened_tweets, output_file)
+    } else {
+      screened_tweets <<- bind_rows(screened_tweets, cur_decision)
+      write_csv(cur_decision, output_file, append = TRUE)
+    }
+    index <<- index + 1}
 }
 
 # FUN: Create the data to be exported
@@ -27,7 +51,7 @@ tweet_decision <- function(data, decision) {
 
 # FUN: Create unique session file based on hashed timestamp
 
-reset_output <- function(string) {
+reset_output <- function(output_folder, string) {
   file.path(output_folder, paste0("screened_tweets_", str_extract(string, "[A-Za-z]+"), "_", Sys.Date(), "-", digest(Sys.time()), ".csv"))
 }
 
@@ -43,12 +67,11 @@ data_buttons <- c("submit", "update", "filter", "date", "data", "ignore_case")
 
 # UI buttons
 
-UI_buttons <- c("prev_tweet", "include_tweet", "exclude_tweet")
+UI_buttons <- c("next_tweet", "include_tweet", "exclude_tweet")
 
 #TODO: Add an option to change the folder
 
-output_folder <- "data"
-if(!dir.exists(output_folder)) dir.create(output_folder)
+#output_folder <- "data"
 
 # Create index
 
