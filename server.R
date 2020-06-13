@@ -45,7 +45,9 @@ server <- function(input, output, session) {
     # remove already screened
     
     if(input$remove_screened == TRUE) {
-      already_screened <- list.files(input$output_folder, full.names = TRUE)
+      already_screened <- list.files(input$output_folder,
+                                     pattern = "screened_tweets.*\\.csv",
+                                     full.names = TRUE)
       already_screened <- already_screened %>% 
         map(read_csv, col_types = "ccc") %>% 
         bind_rows()
