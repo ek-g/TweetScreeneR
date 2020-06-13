@@ -42,7 +42,7 @@ decision_action <- function(data, decision) {
   if(index < nrow(data)) { 
     index <<- index + 1 
     } else {
-      shinyalert("Nice!", "You've succesfully screened the last tweet. All your decisions have been saved, you can now press 'Stop'.", type = "success")
+      shinyalert("Nice!", "You've succesfully screened the last tweet. All your decisions have been saved — you may now press 'Stop'.", type = "success")
     }
 }
 
@@ -74,11 +74,5 @@ data_buttons <- c("submit", "update", "filter", "date", "data", "ignore_case")
 # UI buttons
 
 UI_buttons <- c("next_tweet", "include_tweet", "exclude_tweet")
-
-#TODO: Add an option to change the folder
-
-#output_folder <- "data"
-
-# Create index
 
 index <- 1
