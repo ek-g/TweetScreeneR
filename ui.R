@@ -2,6 +2,7 @@
 ui <- fixedPage(
     
     useShinyjs(),
+    useShinyalert(),
   
     titlePanel("TweetScreeneR"),
     

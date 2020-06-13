@@ -1,5 +1,6 @@
 library(shiny)
 library(shinyjs)
+library(shinyalert)
 library(tidyverse)
 library(lubridate)
 library(digest)
@@ -28,8 +29,8 @@ get_tweets <- function(path) {
 # FUN: Save the decision data
 
 decision_action <- function(data, decision) {
-  if(index != nrow(data) + 1){ 
     cur_decision <- tweet_decision(data, decision)
+    
     if(cur_decision$status_id %in% screened_tweets$status_id) {
       screened_tweets[screened_tweets$status_id == cur_decision$status_id,] <<- cur_decision
       write_csv(screened_tweets, output_file)
@@ -37,7 +38,12 @@ decision_action <- function(data, decision) {
       screened_tweets <<- bind_rows(screened_tweets, cur_decision)
       write_csv(cur_decision, output_file, append = TRUE)
     }
-    index <<- index + 1}
+    
+  if(index < nrow(data)) { 
+    index <<- index + 1 
+    } else {
+      shinyalert("Nice!", "You've succesfully screened the last tweet. All your decisions have been saved, you can now press 'Stop'.", type = "success")
+    }
 }
 
 # FUN: Create the data to be exported
