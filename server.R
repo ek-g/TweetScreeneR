@@ -86,6 +86,7 @@ server <- function(input, output, session) {
       if(!dir.exists(input$output_folder)) dir.create(input$output_folder)
       output_file <<- reset_output(input$output_folder, input$filter)
       write_csv(screened_tweets, output_file, col_names = TRUE)
+      index <<- 1
     }
     # Disable start if filter not applied a second time
     if(toggle_label == "Start") disable("start")
