@@ -28,10 +28,7 @@ ui <- fixedPage(
                                 ), # END conditionalPanel
           ), # END tabPanel
           tabPanel(title = "Advanced",
-                   textInput("output_folder", h4("Output folder:"), "data"),
-                   # checkboxInput("custom_buttons", "Custom labels"),
-                   # textInput("buttons", h5("Labels (comma separated):")),
-                   # actionButton("add_buttons", "Add")
+                   textInput("output_folder", h4("Output folder:"), "data")
                    )
                       ),
           width = 4,

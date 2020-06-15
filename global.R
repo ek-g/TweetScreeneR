@@ -5,15 +5,6 @@ library(tidyverse)
 library(lubridate)
 library(digest)
 
-# labels <- c("test1", "test2", "test3")
-# 
-# generate_buttons <- function(labels) {
-#   buttons <- labels %>% 
-#     map(actionButton, label = labels)
-#   
-#   return(unlist(buttons))
-# }
-
 # FUN: Get all tweets from .RDS files
 
 get_tweets <- function(path) {
@@ -74,5 +65,7 @@ data_buttons <- c("submit", "update", "filter", "date", "data", "ignore_case")
 # UI buttons
 
 UI_buttons <- c("next_tweet", "include_tweet", "exclude_tweet")
+
+# Tweet index
 
 index <- 1

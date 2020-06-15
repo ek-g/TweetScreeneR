@@ -4,12 +4,8 @@ server <- function(input, output, session) {
 # Load data
   
   tweets <- eventReactive(input$submit, {
-    
     path <- do.call(file.path, as.list(stringr::str_split(input$data, "/")[[1]]))
-    
-    tweets <- get_tweets(path)
-    
-    return(tweets)
+    get_tweets(path)
   })
   
   output$tweet_count <- renderPrint({
@@ -42,7 +38,7 @@ server <- function(input, output, session) {
         mutate(text = str_replace_all(text, "@[A-Za-z0-9_\\-]+", "@mention"))
     }
     
-    # remove already screened
+    # Remove already screened
     
     if(input$remove_screened == TRUE) {
       already_screened <- list.files(input$output_folder,
@@ -72,6 +68,7 @@ server <- function(input, output, session) {
     # Disable data buttons (side panel)
     data_buttons %>% 
       map(toggleState)
+    
     # Enable UI buttons
     UI_buttons %>% 
       map(toggleState)
@@ -104,7 +101,7 @@ server <- function(input, output, session) {
 
   
   # Basic navigation:
-  
+  # TODO: Put index and other 'global' objects in own environment
   observeEvent(input$prev_tweet, if(index != 1){ index <<- index - 1 })
   observeEvent(input$next_tweet, if(index < nrow(tweets_filtered())){ index <<- index + 1 })
   
@@ -113,27 +110,6 @@ server <- function(input, output, session) {
   output$summary <- renderPrint({
     cat("Tweets found:", nrow(tweets_filtered()))
   })
-  
-  # observeEvent(input$custom_buttons, map(c("buttons", "add_buttons"), toggleState))
-  # 
-  # observeEvent(input$add_buttons, {
-  #   
-  #   buttons <- str_squish(str_split(input$buttons, ",")[[1]])
-  #   
-  #   isolate({output$buttons <- renderUI({
-  #     btn_ids <<- paste0("btn_", buttons)
-  #     btn_labels <<- buttons
-  #     map2(btn_ids, btn_labels, actionButton)})
-  #   
-  #   for(ii in 1:length(labels)){
-  #     local({
-  #       i <- ii
-  #       observeEvent(eventExpr = input[[paste0(btn_ids[i])]],
-  #                    handlerExpr = {alert(sprintf("You clicked btn named %s",btn_labels[i]))})
-  #     })
-  #   }
-  #   })
-  # })
   
   # Render the filtered tweets
   
