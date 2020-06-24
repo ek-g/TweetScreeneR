@@ -2,6 +2,8 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+<img src="http://kuusisto.de/screenshots/tweetscreener_screenshot.png" width="400">
+
 A Shiny Application to manually screen — or classify — Tweets downloaded from the Twitter API with the [`rtweet`](https://rtweet.info)-package.
 
 The app is currently being actively developed towards the first alpha release. There are no known issues or bugs, but the usability is limited: only dichotomous classification (Include/Exclude) is possible, with no option to customize the labels.
@@ -23,3 +25,4 @@ Every time the 'Start'-Button is pressed a session file is created in the output
   + Option to save the configuration in a file
 - Option to change the file format and naming convention of imported and exported files (currently only the folder can be changed)
   + Option to choose exported fields
+
