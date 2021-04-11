@@ -1,12 +1,13 @@
 # TweetScreeneR
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/257565343.svg)](https://zenodo.org/badge/latestdoi/257565343)
 
 <img src="http://kuusisto.de/screenshots/tweetscreener_screenshot.png" width="400">
 
 A Shiny Application to manually screen — or classify — Tweets downloaded from the Twitter API with the [`rtweet`](https://rtweet.info)-package.
 
-The app is currently being actively developed towards the first alpha release. There are no known issues or bugs, but the usability is limited: only dichotomous classification (Include/Exclude) is possible, with no option to customize the labels.
+The app is currently being actively developed towards the first beta release. There are no known issues or bugs, but the usability is limited: only dichotomous classification (Include/Exclude) is possible, with no option to customize the labels.
 
 # Usage
 
