@@ -60,7 +60,7 @@ screened_tweets <- tibble(text = character(),
 
 # Buttons on sidepanel
 
-data_buttons <- c("submit", "update", "filter", "date", "data", "ignore_case")
+data_buttons <- c("submit", "update", "filter", "date", "data", "ignore_case", "replace_mentions", "remove_screened")
 
 # UI buttons
 
